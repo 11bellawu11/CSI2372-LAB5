@@ -46,4 +46,25 @@ int main() {
 	return 0;
 }
 
+void Card::write() {
+	if (val <= 10) {
+		cout << val << " of " << col << endl;
+	} else{
+		switch (val) {
+			case 11:
+				cout << "Jack of " << col << endl;
+				break;
+			case 12:
+				cout << "Queen of " << col << endl;
+				break;
+
+			case 13:
+				cout << "King of " << col << endl;
+				break;
+		
+			
+		}
+	}
+	
+}
 
