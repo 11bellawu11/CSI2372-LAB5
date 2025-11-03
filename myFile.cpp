@@ -121,3 +121,77 @@ Card CardsSet::lookIn(int no) {
 	cout << "Out of range" << endl; 
 	return Card();
 }
+
+
+int Player::countPoints() {
+    int sum = 0;
+    int aces = 0;
+
+    for (int i = 1; i <= inHand.numCards(); i++) {
+        Card c = inHand.lookIn(i);
+        int v = c.value();
+        if (v == 1)
+            aces++;
+        else if (v > 10)
+            v = 10; // J, Q, K = 10
+        sum += v;
+    }
+
+    // Handle Aces (1 or 14)
+    while (aces > 0) {
+        if (sum + 14 <= 21)
+            sum += 14;
+        else
+            sum += 1;
+        aces--;
+    }
+
+    return sum;
+}
+
+
+/**
+ * Play: draws cards and returns total score.
+ * - User decides when to stop.
+ * - Computer stops when >= 17.
+ */
+int Player::play() {
+    char answer = 'y';
+    int score = 0;
+    inHand.empty(); // clear previous hand before each round
+
+    if (computer) {
+        cout << "\nComputer's turn..." << endl;
+        do {
+            Card c = packet.take();
+            inHand.put(c);
+            cout << "Computer gets card: ";
+            c.write();
+            cout << endl;
+            score = countPoints();
+        } while (score < 17);
+        cout << "Computer's score: " << score << endl;
+        return score;
+    } 
+    else {
+        // Human player
+        while (answer == 'y' || answer == 'Y') {
+            Card c = packet.take();
+            inHand.put(c);
+
+            cout << "You get card: ";
+            c.write();
+            cout << endl;
+
+            score = countPoints();
+            cout << "Your score is " << score << " points" << endl;
+
+            if (score > 21)
+                return score; // lost
+
+            cout << "Any additional Card? (y/n): ";
+            cin >> answer;
+        }
+        return score;
+    }
+}
