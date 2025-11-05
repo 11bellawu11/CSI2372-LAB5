@@ -132,17 +132,13 @@ int Player::countPoints() {
         int v = c.value();
         if (v == 1)
             aces++;
-        else if (v > 10)
-            v = 10; // J, Q, K = 10
         sum += v;
     }
 
     // Handle Aces (1 or 14)
     while (aces > 0) {
         if (sum + 14 <= 21)
-            sum += 14;
-        else
-            sum += 1;
+            sum += 13; //+1 from previous loop
         aces--;
     }
 
