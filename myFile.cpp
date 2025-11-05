@@ -125,21 +125,14 @@ Card CardsSet::lookIn(int no) {
 
 int Player::countPoints() {
     int sum = 0;
-    int aces = 0;
 
-    for (int i = 1; i <= inHand.numCards(); i++) {
+    for (int i = inHand.numCards(); i >= 1; i--) {
         Card c = inHand.lookIn(i);
         int v = c.value();
-        if (v == 1)
-            aces++;
+        if (v == 1 && sum + 14 <= 21) { // Ace = 1 if exceeds 21, 14 otherwise
+			v = 14;
+		}
         sum += v;
-    }
-
-    // Handle Aces (1 or 14)
-    while (aces > 0) {
-        if (sum + 14 <= 21)
-            sum += 13; //+1 from previous loop
-        aces--;
     }
 
     return sum;
